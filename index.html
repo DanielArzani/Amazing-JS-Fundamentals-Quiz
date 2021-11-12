@@ -8,6 +8,51 @@
     <link rel="stylesheet" href="./Assets/CSS/styles.css" />
   </head>
   <body>
+    <!-- MAIN CONTAINER FOR QUIZ -->
+    <main class="container">
+      <!-- Link for viewing high scores -->
+      <a href="#">View high scores</a>
+      <!-- Timer -->
+      <span id="time-countdown">Time:</span>
+      <!-- INTRODUCTION SECTION -->
+      <div class="intro">
+        <h1>Coding Quiz Challenge</h1>
+        <p>
+          Try to answer the coding related questions within the time limit. Keep
+          in mind that incorrect answers will penalize your score/time by 10
+          seconds!
+        </p>
+        <button class="btn start-btn" id="start-quiz">Start Quiz</button>
+      </div>
+      <!-- QUIZ SECTION -->
+      <div class="quiz">
+        <h1>Question</h1>
+        <div class="option-list">
+          <span class="option">Question 1</span>
+          <span class="option">Question 2</span>
+          <span class="option">Question 3</span>
+          <span class="option">Question 4</span>
+        </div>
+        <p class="choice">Right or Wrong</p>
+      </div>
+      <!-- SUBMIT FORM -->
+      <form>
+        <h1>All Done!</h1>
+        <p>Your final score is <span>Score</span></p>
+        <label for="input-name">Enter Initials</label>
+        <input type="text" name="input-name" id="input-name" />
+        <button type="submit">Submit</button>
+      </form>
+      <!-- HIGH SCORES SECTION -->
+      <div class="high-scores">
+        <h1></h1>
+        <span></span>
+        <div class="btn-group">
+          <button class="restart">Go back</button>
+          <button class="clear-scores">Clear high scores</button>
+        </div>
+      </div>
+    </main>
     <script src="./Assets/JS/script.js"></script>
   </body>
 </html>
