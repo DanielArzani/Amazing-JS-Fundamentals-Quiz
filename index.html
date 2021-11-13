@@ -11,11 +11,15 @@
     <!-- MAIN CONTAINER FOR QUIZ -->
     <main class="container">
       <!-- Link for viewing high scores -->
-      <a href="#">View high scores</a>
+      <div class="link-wrapper">
+        <a href="#" class="high-score-link">View high scores</a>
+      </div>
       <!-- Timer -->
-      <span id="time-countdown">Time:</span>
+      <div class="timer-wrapper">
+        <span id="time-countdown">Time: 0</span>
+      </div>
       <!-- INTRODUCTION SECTION -->
-      <div class="intro">
+      <div class="intro" id="JS-intro">
         <h1>Coding Quiz Challenge</h1>
         <p>
           Try to answer the coding related questions within the time limit. Keep
@@ -25,28 +29,36 @@
         <button class="btn start-btn" id="start-quiz">Start Quiz</button>
       </div>
       <!-- QUIZ SECTION -->
-      <div class="quiz">
+      <div class="quiz hide" id="JS-quiz">
         <h1>Question</h1>
-        <div class="option-list">
-          <span class="option">Question 1</span>
-          <span class="option">Question 2</span>
-          <span class="option">Question 3</span>
-          <span class="option">Question 4</span>
-        </div>
-        <p class="choice">Right or Wrong</p>
+        <div class="option-list" id="JS-option-list">
+          <div class="button-wrapper">
+            <p class="btn option" data-number="1">Option 1</p>
+          </div>
+          <div class="button-wrapper">
+            <p class="btn option" data-number="2">Option 2</p>
+          </div>
+          <div class="button-wrapper">
+            <p class="btn option" data-number="3">Option 3</p>
+          </div>
+          <div class="button-wrapper">
+            <p class="btn option" data-number="4">Option 4</p>
+          </div>
       </div>
       <!-- SUBMIT FORM -->
-      <form>
+      <form class="hide" id="JS-form">
         <h1>All Done!</h1>
         <p>Your final score is <span>Score</span></p>
-        <label for="input-name">Enter Initials</label>
-        <input type="text" name="input-name" id="input-name" />
-        <button type="submit">Submit</button>
+        <div class="submit-container">
+          <label for="input-name">Enter Initials:</label>
+          <input type="text" name="input-name" id="input-name" />
+          <button type="submit">Submit</button>
+        </div>
       </form>
       <!-- HIGH SCORES SECTION -->
-      <div class="high-scores">
-        <h1></h1>
-        <span></span>
+      <div class="high-scores hide" id="JS-high-scores">
+        <h1>High Scores</h1>
+        <span>1: DA - 23</span>
         <div class="btn-group">
           <button class="restart">Go back</button>
           <button class="clear-scores">Clear high scores</button>

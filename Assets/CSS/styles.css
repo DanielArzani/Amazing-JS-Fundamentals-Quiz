@@ -1,1 +1,144 @@
+:root {
+  --btn-color: #341c75;
+  --link-color: #cc84ed;
+}
 
+/* Resets browser defaults */
+* {
+  box-sizing: border-box;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* UTILITIES */
+/* General styling for buttons */
+button,
+.btn {
+  background-color: var(--btn-color);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+  margin: 0 auto;
+  padding: 0.5em 1em;
+}
+
+button:hover,
+.btn:hover {
+  background-color: var(--link-color);
+  cursor: pointer;
+}
+
+/* Positions container for quiz */
+body {
+  align-items: center;
+  border: 1px solid;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+}
+
+/* Position quiz elements */
+.container {
+  align-items: center;
+  border: 3px solid;
+  display: flex;
+  height: 90vh;
+  justify-content: center;
+  max-width: 90%;
+  position: relative;
+  width: 90vw;
+}
+
+/* Positioning for the view high scores link */
+.link-wrapper {
+  position: absolute;
+  top: 3.3125rem;
+  left: 2.4375rem;
+}
+
+/* Styling for high scores link */
+.high-score-link {
+  color: var(--link-color);
+}
+
+/* Position for the timer */
+.timer-wrapper {
+  position: absolute;
+  top: 3.3125rem;
+  right: 2.4375rem;
+}
+
+/* General position of all containers */
+.intro,
+.quiz,
+form,
+.high-scores {
+  /* border: 1px solid; */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 50vh;
+  max-width: 50%;
+  width: 50vw;
+}
+
+/* INTRO SECTION */
+
+/* Position for introduction header */
+.intro h1 {
+  align-self: center;
+}
+
+/* Styling for introduction text */
+.intro p {
+  padding: 0 5em;
+  font-size: 20px;
+}
+
+/* QUIZ SECTION */
+/* Positioning for header */
+.quiz h1 {
+  margin-left: 0.5em;
+}
+
+.option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-right: 25em;
+}
+
+/* Styling for Wrong/Right text and its border */
+.choice-wrapper {
+  color: #e2e2e2;
+  font-weight: bold;
+  border-top: 1px solid;
+}
+
+/* Positioning for Wrong/Right text */
+.choice {
+  padding-top: 1em;
+  padding-left: 1em;
+}
+
+/* FORM SECTION */
+/* Sets style for input text field */
+.submit-container input {
+  height: 2em;
+  width: 17em;
+}
+/* HIGH SCORES SECTION */
+.high-scores span {
+  padding-top: 0.5em;
+  height: 2em;
+  width: 30em;
+  background-color: #d9d3e9;
+}
+
+/* JS - Will hide what is it is applied to */
+.hide {
+  display: none;
+}
