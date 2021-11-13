@@ -1,5 +1,4 @@
 //TODO Hide Link and timer on high scores section
-//TODO Make it so a new answer can't be selected immediately after picking the first one
 
 //* Variables
 const introSection = document.querySelector("#JS-intro");
@@ -17,6 +16,7 @@ const submitButtonEl = document.querySelector("#submit");
 // Other variables
 const textCorrect = document.querySelector(".choice-correct");
 const textWrong = document.querySelector(".choice-wrong");
+const timer = document.querySelector("#time-countdown");
 
 // Current question being asked
 let currentQuestions = {};
@@ -26,6 +26,9 @@ let availableQuestions = [];
 let questionCounter = 0;
 // Variable for prevent user from clicking too quickly too many times thus messing up the game
 let acceptingAnswers = false;
+// What the timer will start it
+let startTime = 6;
+let timeDown;
 
 //* Questions
 let questions = [
@@ -56,6 +59,23 @@ let questions = [
 ];
 
 //* Functions
+// Timer start function
+function timerStartFunction() {
+  if (startTime >= 0 && sectionCounter !== 2) {
+    console.log(sectionCounter);
+    timer.textContent = startTime;
+    startTime--;
+  } else {
+    timerStopFunction();
+    quizSection.classList.add("hide");
+    formSection.classList.remove("hide");
+  }
+}
+// Timer stop function
+function timerStopFunction() {
+  clearInterval(timeDown);
+}
+
 // When this function is called it will hide the current section and show the next one
 let sectionCounter = 0;
 const nextSection = function () {
@@ -64,11 +84,14 @@ const nextSection = function () {
   if (sectionCounter === 0) {
     introSection.classList.add("hide");
     quizSection.classList.remove("hide");
+    timeDown = setInterval(timerStartFunction, 1000);
     sectionCounter++;
+    console.log(sectionCounter);
   } else if (sectionCounter === 1) {
     quizSection.classList.add("hide");
     formSection.classList.remove("hide");
     sectionCounter++;
+    console.log(sectionCounter);
   }
   // This will make availableQuestions into a full copy of the questions array
   availableQuestions = [...questions];
@@ -80,7 +103,9 @@ function getNewQuestions() {
   if (availableQuestions.length === 0) {
     nextSection();
   }
-  // questionCounter = 0;
+
+  // Start timer
+
   // Creates a variable that stores the index position of random available questions
   const questionIndex = Math.floor(Math.random() * availableQuestions.length);
   // The question currently being asked will be randomized each time
@@ -146,12 +171,15 @@ quizAnswers.forEach(function (option) {
   });
 });
 
+function moveOntoHighScore(e) {
+  e.preventDefault();
+  formSection.classList.add("hide");
+  highScoresSection.classList.remove("hide");
+}
+
 //* Event Listeners
 // When start button is pressed, the quiz will start
 startButtonEl.addEventListener("click", nextSection);
 
 // When submit button is pressed, high score will be submitted
-submitButtonEl.addEventListener("click", function () {
-  formSection.classList.add("hide");
-  highScoresSection.classList.remove("hide");
-});
+submitButtonEl.addEventListener("click", moveOntoHighScore);
