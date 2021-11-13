@@ -1,6 +1,5 @@
-// TODO Hide Link and timer on high scores section
-// TODO learn about timers!
-// TODO LEARN HOW TO SORT AN ARRAY https://www.sitepoint.com/sort-an-array-of-objects-in-javascript/
+//TODO Hide Link and timer on high scores section
+//TODO Make it so a new answer can't be selected immediately after picking the first one
 
 //* Variables
 const introSection = document.querySelector("#JS-intro");
@@ -13,6 +12,7 @@ const quizAnswers = Array.from(document.querySelectorAll(".option"));
 
 // Buttons
 const startButtonEl = document.querySelector("#start-quiz");
+const submitButtonEl = document.querySelector("#submit");
 
 // Other variables
 const textCorrect = document.querySelector(".choice-correct");
@@ -24,6 +24,8 @@ let currentQuestions = {};
 let availableQuestions = [];
 // what question the player is currently on
 let questionCounter = 0;
+// Variable for prevent user from clicking too quickly too many times thus messing up the game
+let acceptingAnswers = false;
 
 //* Questions
 let questions = [
@@ -93,13 +95,20 @@ function getNewQuestions() {
 
   // Removes a repeated question so it can't be used anymore
   availableQuestions.splice(questionIndex, 1);
+
+  // This won't let others click on an answer until everything is loaded
+  acceptingAnswers = true;
 }
 
 // When answer is clicked on, right or wrong will be displayed, time from timer will be subtracted and next question will show
 
 quizAnswers.forEach(function (option) {
   // Listens for a click event on one of the answers
+
   option.addEventListener("click", function (e) {
+    // After someone answers they will need to wait before answering again
+    if (!acceptingAnswers) return;
+    acceptingAnswers = false;
     // Stores the answer that is clicked on in a variable called choice
     const choice = e.target;
 
@@ -142,3 +151,7 @@ quizAnswers.forEach(function (option) {
 startButtonEl.addEventListener("click", nextSection);
 
 // When submit button is pressed, high score will be submitted
+submitButtonEl.addEventListener("click", function () {
+  formSection.classList.add("hide");
+  highScoresSection.classList.remove("hide");
+});
