@@ -116,6 +116,8 @@ form,
   color: #e2e2e2;
   font-weight: bold;
   border-top: 1px solid;
+  margin-top: 1em;
+  width: 40em;
 }
 
 /* Positioning for Wrong/Right text */
