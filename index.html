@@ -45,20 +45,23 @@
             <p class="btn option" data-number="4">Option 4</p>
           </div>
           <div class="choice-wrapper">
-            <p class="choice hide">Correct</p>
-            <p class="choice hide">Wrong</p>
+            <p class="choice-correct hide">Correct</p>
+            <p class="choice-wrong hide">Wrong</p>
           </div>
+        </div>
       </div>
       <!-- SUBMIT FORM -->
-      <form class="hide" id="JS-form">
-        <h1>All Done!</h1>
-        <p>Your final score is <span>Score</span></p>
-        <div class="submit-container">
-          <label for="input-name">Enter Initials:</label>
-          <input type="text" name="input-name" id="input-name" />
-          <button type="submit">Submit</button>
-        </div>
-      </form>
+      <div class="form-container hide">
+        <form id="JS-form">
+          <h1>All Done!</h1>
+          <p>Your final score is <span>Score</span></p>
+          <div class="submit-container">
+            <label for="input-name">Enter Initials:</label>
+            <input type="text" name="input-name" id="input-name" />
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
       <!-- HIGH SCORES SECTION -->
       <div class="high-scores hide" id="JS-high-scores">
         <h1>High Scores</h1>

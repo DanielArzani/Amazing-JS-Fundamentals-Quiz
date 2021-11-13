@@ -5,14 +5,18 @@
 //* Variables
 const introSection = document.querySelector("#JS-intro");
 const quizSection = document.querySelector("#JS-quiz");
-const formSection = document.querySelector("#JS-form");
+const formSection = document.querySelector(".form-container");
 const highScoresSection = document.querySelector("#JS-high-scores");
-
 const quizHeader = document.querySelector("#JS-quiz h1");
 // We are turning our nodelist into an array
 const quizAnswers = Array.from(document.querySelectorAll(".option"));
 
+// Buttons
 const startButtonEl = document.querySelector("#start-quiz");
+
+// Other variables
+const textCorrect = document.querySelector(".choice-correct");
+const textWrong = document.querySelector(".choice-wrong");
 
 // Current question being asked
 let currentQuestions = {};
@@ -20,8 +24,6 @@ let currentQuestions = {};
 let availableQuestions = [];
 // what question the player is currently on
 let questionCounter = 0;
-// score
-// let score = 0;
 
 //* Questions
 let questions = [
@@ -47,7 +49,7 @@ let questions = [
     option2: "2. Curly Brackets",
     option3: "3. Parenthesis",
     option4: "4. Square Brackets",
-    answer: 2,
+    answer: 3,
   },
 ];
 
@@ -55,19 +57,18 @@ let questions = [
 // When this function is called it will hide the current section and show the next one
 let sectionCounter = 0;
 const nextSection = function () {
-  // Each section has been given an index number
-  let currentSection = [
-    introSection,
-    quizSection,
-    formSection,
-    highScoresSection,
-  ];
-  // When the start button is pressed the first section will hide
-  currentSection[sectionCounter].classList.add("hide");
-  sectionCounter++;
-  // The counter will increment and cause the next section to appear
-  currentSection[sectionCounter].classList.remove("hide");
-  // This will make availableQuestions into a full copy of the our questions array
+  questionCounter = 0;
+
+  if (sectionCounter === 0) {
+    introSection.classList.add("hide");
+    quizSection.classList.remove("hide");
+    sectionCounter++;
+  } else if (sectionCounter === 1) {
+    quizSection.classList.add("hide");
+    formSection.classList.remove("hide");
+    sectionCounter++;
+  }
+  // This will make availableQuestions into a full copy of the questions array
   availableQuestions = [...questions];
   // Calling function that displays our questions
   getNewQuestions();
@@ -75,9 +76,9 @@ const nextSection = function () {
 
 function getNewQuestions() {
   if (availableQuestions.length === 0) {
-    alert("done");
+    nextSection();
   }
-  questionCounter = 0;
+  // questionCounter = 0;
   // Creates a variable that stores the index position of random available questions
   const questionIndex = Math.floor(Math.random() * availableQuestions.length);
   // The question currently being asked will be randomized each time
@@ -94,18 +95,50 @@ function getNewQuestions() {
   availableQuestions.splice(questionIndex, 1);
 }
 
-//* Event Listeners
-// When start button is pressed, the quiz will start
-startButtonEl.addEventListener("click", nextSection);
-
 // When answer is clicked on, right or wrong will be displayed, time from timer will be subtracted and next question will show
+
 quizAnswers.forEach(function (option) {
   // Listens for a click event on one of the answers
   option.addEventListener("click", function (e) {
     // Stores the answer that is clicked on in a variable called choice
     const choice = e.target;
+
     // Stores the dataset of the answer that was clicked on
     const answer = choice.dataset["number"];
-    getNewQuestions();
+    // Sets default for class that will be applied if the chosen answer is wrong or not
+    // let correctOrWrong = "wrong";
+    let correctOrWrong;
+    if (answer != currentQuestions.answer) {
+      correctOrWrong = "wrong";
+      textWrong.classList.remove("hide");
+    }
+    // If the chosen answers dataset number loosely matches that of the answer it will change the class of correctOrWrong to "correct"
+    if (answer == currentQuestions.answer) {
+      correctOrWrong = "correct";
+      textCorrect.classList.remove("hide");
+    }
+    // Once the user picks an answer, it will add the class "wrong" or "correct" to it as well as display the correct or wrong text
+    choice.classList.add(correctOrWrong);
+    console.log(`choice:${answer}, Answer:${currentQuestions.answer}`);
+    console.log(choice);
+
+    // This will remove the class after it has been picked after a certain amount of time before loading a new question
+    setTimeout(function () {
+      choice.classList.remove(correctOrWrong);
+      // Gets new question after an answer has been selected
+      getNewQuestions();
+    }, 1000);
+
+    // This will allow the wrong or correct text to stay a little bit longer before disappearing
+    setTimeout(function () {
+      textCorrect.classList.add("hide");
+      textWrong.classList.add("hide");
+    }, 2000);
   });
 });
+
+//* Event Listeners
+// When start button is pressed, the quiz will start
+startButtonEl.addEventListener("click", nextSection);
+
+// When submit button is pressed, high score will be submitted
