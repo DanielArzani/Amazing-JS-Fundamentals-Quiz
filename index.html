@@ -12,7 +12,9 @@
     <main class="container">
       <!-- Link for viewing high scores -->
       <div class="link-wrapper">
-        <a href="#" class="high-score-link">View high scores</a>
+        <a href="#" class="high-score-link" id="scores-link"
+          >View high scores</a
+        >
       </div>
       <!-- Timer -->
       <div class="timer-wrapper">
@@ -54,10 +56,15 @@
       <div class="form-container hide">
         <form id="JS-form">
           <h1>All Done!</h1>
-          <p>Your final score is <span>Score</span></p>
+          <p>Your final score is <span id="score-text"></span></p>
           <div class="submit-container">
             <label for="input-name">Enter Initials:</label>
-            <input type="text" name="input-name" id="input-name" />
+            <input
+              type="text"
+              name="input-name"
+              id="input-name"
+              placeholder="Initials"
+            />
             <button type="submit" id="submit">Submit</button>
           </div>
         </form>
@@ -73,5 +80,7 @@
       </div>
     </main>
     <script src="./Assets/JS/script.js"></script>
+    <!-- <script src="../file.js"></script> -->
+    <!-- <script src="../organizer.js"></script> -->
   </body>
 </html>

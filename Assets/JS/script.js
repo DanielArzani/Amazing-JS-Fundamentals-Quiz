@@ -1,13 +1,14 @@
-//TODO Hide Link and timer on high scores section
-
 //* Variables
+
 const introSection = document.querySelector("#JS-intro");
 const quizSection = document.querySelector("#JS-quiz");
 const formSection = document.querySelector(".form-container");
 const highScoresSection = document.querySelector("#JS-high-scores");
 const quizHeader = document.querySelector("#JS-quiz h1");
 // We are turning our nodelist into an array
-const quizAnswers = Array.from(document.querySelectorAll(".option"));
+const quizAnswersArray = Array.from(document.querySelectorAll(".option"));
+const quizAnswers = document.querySelectorAll(".option");
+const quizParent = document.querySelector("#JS-option-list");
 
 // Buttons
 const startButtonEl = document.querySelector("#start-quiz");
@@ -17,6 +18,10 @@ const submitButtonEl = document.querySelector("#submit");
 const textCorrect = document.querySelector(".choice-correct");
 const textWrong = document.querySelector(".choice-wrong");
 const timer = document.querySelector("#time-countdown");
+const timeText = document.querySelector(".time-text");
+const scoreText = document.querySelector("#score-text");
+const scoreLink = document.querySelector("#scores-link");
+const input = document.querySelector("#input-name");
 
 // Current question being asked
 let currentQuestions = {};
@@ -26,11 +31,13 @@ let availableQuestions = [];
 let questionCounter = 0;
 // Variable for prevent user from clicking too quickly too many times thus messing up the game
 let acceptingAnswers = false;
-// What the timer will start it
+// What the timer will start it and is also the score
 let startTime = 6;
+// Timer
 let timeDown;
 
-//* Questions
+//* Questions List
+
 let questions = [
   {
     question: "Commonly used data types do not include___",
@@ -58,65 +65,62 @@ let questions = [
   },
 ];
 
-//* Functions
-// Timer start function
-function timerStartFunction() {
-  if (startTime >= 0 && sectionCounter !== 2) {
-    console.log(sectionCounter);
-    timer.textContent = startTime;
+// This makes availableQuestions a full copy of our questions array
+availableQuestions = [...questions];
+
+//*FUNCTIONS
+
+// Function that will start counting from startTime down to 0 then stop
+function countDownFunction() {
+  if (startTime >= 0 && sectionCounter === 1) {
+    timer.innerText = startTime;
     startTime--;
-  } else {
-    timerStopFunction();
-    quizSection.classList.add("hide");
-    formSection.classList.remove("hide");
+    console.log(startTime);
+  } else if (startTime < 0) {
+    nextSection();
   }
 }
-// Timer stop function
-function timerStopFunction() {
-  clearInterval(timeDown);
-}
 
-// When this function is called it will hide the current section and show the next one
+// When called it moves to next section and decides what happens in each section
 let sectionCounter = 0;
 const nextSection = function () {
   questionCounter = 0;
-
-  if (sectionCounter === 0) {
+  // This begins the counter
+  const oneMinute = setInterval(countDownFunction, 1000);
+  // If sectionCounter = 1 => first section,if... = 2 => second section, etc...
+  sectionCounter++;
+  if (sectionCounter === 1) {
     introSection.classList.add("hide");
     quizSection.classList.remove("hide");
-    timeDown = setInterval(timerStartFunction, 1000);
-    sectionCounter++;
-    console.log(sectionCounter);
-  } else if (sectionCounter === 1) {
+    // Calls the function which gets our questions and displays them
+    getNewQuestions();
+  } else if (sectionCounter === 2 || startTime < 0) {
     quizSection.classList.add("hide");
     formSection.classList.remove("hide");
-    sectionCounter++;
-    console.log(sectionCounter);
+  } else if (sectionCounter === 3) {
+    formSection.classList.add("hide");
+    highScoresSection.classList.remove("hide");
   }
-  // This will make availableQuestions into a full copy of the questions array
-  availableQuestions = [...questions];
-  // Calling function that displays our questions
-  getNewQuestions();
 };
 
+// To generate a new question and display it along with its choices
 function getNewQuestions() {
-  if (availableQuestions.length === 0) {
-    nextSection();
-  }
-
-  // Start timer
-
   // Creates a variable that stores the index position of random available questions
   const questionIndex = Math.floor(Math.random() * availableQuestions.length);
   // The question currently being asked will be randomized each time
   currentQuestions = availableQuestions[questionIndex];
-  // Changes the question header
-  quizHeader.innerText = currentQuestions.question;
-  // Changes the text for the options
-  quizAnswers.forEach(function (option) {
-    const number = option.dataset["number"];
-    option.innerText = currentQuestions["option" + number];
-  });
+  // When this is equal to 0 it means there are no more questions left, so move on to the form section
+  if (availableQuestions.length === 0) {
+    nextSection();
+  } else {
+    // Changes the question header
+    quizHeader.innerText = currentQuestions.question;
+    // Changes the text for the options
+    quizAnswersArray.forEach(function (option) {
+      const number = option.dataset["number"];
+      option.innerText = currentQuestions["option" + number];
+    });
+  }
 
   // Removes a repeated question so it can't be used anymore
   availableQuestions.splice(questionIndex, 1);
@@ -125,61 +129,55 @@ function getNewQuestions() {
   acceptingAnswers = true;
 }
 
-// When answer is clicked on, right or wrong will be displayed, time from timer will be subtracted and next question will show
+// Function that validates answer
+function validateAnswer(e) {
+  // After someone answers they will need to wait before answering again
+  if (!acceptingAnswers) return;
+  acceptingAnswers = false;
+  // Stores the answer that is clicked on in a variable called choice
+  const choice = e.target;
+  // Stores the dataset of the answer that was clicked on
+  const answer = choice.dataset["number"];
+  // correctOrWrong will be a class that gets added depending on if the users choice was right or wrong
+  let correctOrWrong;
+  if (answer != currentQuestions.answer) {
+    correctOrWrong = "wrong";
+    // This will display wrong if the chosen answer is incorrect
+    textWrong.classList.remove("hide");
+  } else if (answer == currentQuestions.answer) {
+    correctOrWrong = "correct";
+    // This will display correct if the chosen answer is incorrect
+    textCorrect.classList.remove("hide");
+  }
+  // Adds 'correct' or 'wrong' class
+  choice.classList.add(correctOrWrong);
+  console.log(choice);
 
-quizAnswers.forEach(function (option) {
-  // Listens for a click event on one of the answers
+  // This will remove the class after it has been picked after a certain amount of time before loading a new question
+  setTimeout(function () {
+    choice.classList.remove(correctOrWrong);
+    // Gets new question after an answer has been selected
+    getNewQuestions();
+  }, 1000);
 
-  option.addEventListener("click", function (e) {
-    // After someone answers they will need to wait before answering again
-    if (!acceptingAnswers) return;
-    acceptingAnswers = false;
-    // Stores the answer that is clicked on in a variable called choice
-    const choice = e.target;
-
-    // Stores the dataset of the answer that was clicked on
-    const answer = choice.dataset["number"];
-    // Sets default for class that will be applied if the chosen answer is wrong or not
-    // let correctOrWrong = "wrong";
-    let correctOrWrong;
-    if (answer != currentQuestions.answer) {
-      correctOrWrong = "wrong";
-      textWrong.classList.remove("hide");
-    }
-    // If the chosen answers dataset number loosely matches that of the answer it will change the class of correctOrWrong to "correct"
-    if (answer == currentQuestions.answer) {
-      correctOrWrong = "correct";
-      textCorrect.classList.remove("hide");
-    }
-    // Once the user picks an answer, it will add the class "wrong" or "correct" to it as well as display the correct or wrong text
-    choice.classList.add(correctOrWrong);
-    console.log(`choice:${answer}, Answer:${currentQuestions.answer}`);
-    console.log(choice);
-
-    // This will remove the class after it has been picked after a certain amount of time before loading a new question
-    setTimeout(function () {
-      choice.classList.remove(correctOrWrong);
-      // Gets new question after an answer has been selected
-      getNewQuestions();
-    }, 1000);
-
-    // This will allow the wrong or correct text to stay a little bit longer before disappearing
-    setTimeout(function () {
-      textCorrect.classList.add("hide");
-      textWrong.classList.add("hide");
-    }, 2000);
-  });
-});
-
-function moveOntoHighScore(e) {
-  e.preventDefault();
-  formSection.classList.add("hide");
-  highScoresSection.classList.remove("hide");
+  // This will allow the wrong or correct text to stay a little bit longer before disappearing
+  setTimeout(function () {
+    textCorrect.classList.add("hide");
+    textWrong.classList.add("hide");
+  }, 1000);
 }
 
-//* Event Listeners
+function saveScore(e) {
+  e.preventDefault();
+}
+
+//*EVENT LISTENERS
+
 // When start button is pressed, the quiz will start
 startButtonEl.addEventListener("click", nextSection);
 
-// When submit button is pressed, high score will be submitted
-submitButtonEl.addEventListener("click", moveOntoHighScore);
+// When answer is selected it will be matched to a correct or incorrect response
+quizParent.addEventListener("click", validateAnswer);
+
+// When submit button is pressed, score will be saved and will move onto high score will be submitted
+submitButtonEl.addEventListener("click", saveScore);
