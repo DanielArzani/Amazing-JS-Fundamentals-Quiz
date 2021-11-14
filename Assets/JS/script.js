@@ -27,12 +27,10 @@ const input = document.querySelector("#input-name");
 let currentQuestions = {};
 // List of unique questions left
 let availableQuestions = [];
-// what question the player is currently on
-let questionCounter = 0;
 // Variable for prevent user from clicking too quickly too many times thus messing up the game
 let acceptingAnswers = false;
 // What the timer will start it and is also the score
-let startTime = 6;
+let startTime = 60;
 // Timer
 let timeDown;
 
@@ -65,7 +63,7 @@ let questions = [
   },
 ];
 
-// This makes availableQuestions a full copy of our questions array
+// This will make availableQuestions into a full copy of the questions array
 availableQuestions = [...questions];
 
 //*FUNCTIONS
@@ -75,8 +73,7 @@ function countDownFunction() {
   if (startTime >= 0 && sectionCounter === 1) {
     timer.innerText = startTime;
     startTime--;
-    console.log(startTime);
-  } else if (startTime < 0) {
+  } else if (startTime < 0 && sectionCounter < 2) {
     nextSection();
   }
 }
@@ -84,7 +81,6 @@ function countDownFunction() {
 // When called it moves to next section and decides what happens in each section
 let sectionCounter = 0;
 const nextSection = function () {
-  questionCounter = 0;
   // This begins the counter
   const oneMinute = setInterval(countDownFunction, 1000);
   // If sectionCounter = 1 => first section,if... = 2 => second section, etc...
@@ -94,9 +90,12 @@ const nextSection = function () {
     quizSection.classList.remove("hide");
     // Calls the function which gets our questions and displays them
     getNewQuestions();
-  } else if (sectionCounter === 2 || startTime < 0) {
+  } else if (sectionCounter === 2) {
+    clearInterval(oneMinute);
     quizSection.classList.add("hide");
     formSection.classList.remove("hide");
+    // When the quiz is over this function will set the currentScore in localstorage and get it then display it
+    currentScore();
   } else if (sectionCounter === 3) {
     formSection.classList.add("hide");
     highScoresSection.classList.remove("hide");
@@ -136,15 +135,25 @@ function validateAnswer(e) {
   acceptingAnswers = false;
   // Stores the answer that is clicked on in a variable called choice
   const choice = e.target;
+  console.log(`choice: ${choice}`);
   // Stores the dataset of the answer that was clicked on
   const answer = choice.dataset["number"];
+  console.log(`answer: ${answer}`);
   // correctOrWrong will be a class that gets added depending on if the users choice was right or wrong
   let correctOrWrong;
-  if (answer != currentQuestions.answer) {
+  if (
+    answer != currentQuestions.answer &&
+    choice.classList.contains("option")
+  ) {
     correctOrWrong = "wrong";
+    // When a wrong answer is chosen, the time will decrease by 10 seconds
+    startTime -= 10;
     // This will display wrong if the chosen answer is incorrect
     textWrong.classList.remove("hide");
-  } else if (answer == currentQuestions.answer) {
+  } else if (
+    answer == currentQuestions.answer &&
+    choice.classList.contains("option")
+  ) {
     correctOrWrong = "correct";
     // This will display correct if the chosen answer is incorrect
     textCorrect.classList.remove("hide");
@@ -167,9 +176,20 @@ function validateAnswer(e) {
   }, 1000);
 }
 
+function currentScore() {
+  if (startTime != null) {
+    // Final score will be sent to local storage
+    localStorage.setItem("currentScore", timer.innerText);
+    scoreText.innerText = localStorage.getItem("currentScore");
+  }
+}
+
 function saveScore(e) {
   e.preventDefault();
+  nextSection();
 }
+
+//! Loading and displaying data from local storage
 
 //*EVENT LISTENERS
 
