@@ -22,7 +22,7 @@ button,
   font-size: 1rem;
   margin: 0 auto;
   padding: 0.5em 1em;
-  max-width: 200px;
+  max-width: 250px;
 }
 
 button:hover,
@@ -134,7 +134,9 @@ form,
   width: 17em;
 }
 /* HIGH SCORES SECTION */
-.high-scores span {
+.high-scores li {
+  /* border: 1px solid; */
+  list-style: none;
   padding-top: 0.5em;
   height: 2em;
   width: 30em;
