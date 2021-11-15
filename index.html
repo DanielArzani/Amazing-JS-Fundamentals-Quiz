@@ -28,11 +28,13 @@
           in mind that incorrect answers will penalize your score/time by 10
           seconds!
         </p>
+        <!-- Start quiz button -->
         <button class="btn start-btn" id="start-quiz">Start Quiz</button>
       </div>
       <!-- QUIZ SECTION -->
       <div class="quiz hide" id="JS-quiz">
         <h1>Question</h1>
+        <!-- Option List -->
         <div class="option-list" id="JS-option-list">
           <div class="button-wrapper">
             <p class="btn option" data-number="1">Option 1</p>
@@ -46,6 +48,7 @@
           <div class="button-wrapper">
             <p class="btn option" data-number="4">Option 4</p>
           </div>
+          <!-- Text for correct or incorrect answers -->
           <div class="choice-wrapper">
             <p class="choice-correct hide">Correct</p>
             <p class="choice-wrong hide">Wrong</p>
@@ -72,10 +75,7 @@
       <!-- HIGH SCORES SECTION -->
       <div class="high-scores hide" id="JS-high-scores">
         <h1>High Scores</h1>
-        <ul id="JS-all-scores">
-          <li class="score-item">1: DA - 23</li>
-        </ul>
-        <!-- <span id="JS-all-scores">1: DA - 23</span> -->
+        <ul id="JS-all-scores"></ul>
         <div class="btn-group">
           <a href="" class="restart btn">Go back</a>
           <a href="" class="clear-scores btn">Clear high scores</a>

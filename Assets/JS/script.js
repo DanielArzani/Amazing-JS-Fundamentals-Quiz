@@ -1,4 +1,3 @@
-//^ORGANZATION
 //* Variables
 
 const introSection = document.querySelector("#JS-intro");
@@ -35,9 +34,7 @@ let availableQuestions = [];
 // Variable for prevent user from clicking too quickly too many times thus messing up the game
 let acceptingAnswers = false;
 // What the timer will start it and is also the score
-let startTime = 60;
-// Timer
-let timeDown;
+let startTime = 100;
 
 // Since we are getting the highscores for the first time this will initialize our empty array which the scores will be saved to
 const highScores = JSON.parse(localStorage.getItem("highScores")) || [];
@@ -79,23 +76,66 @@ let questions = [
     answer: 1,
   },
   {
-    question: "What is the difference between “ == “ and “ === “ operators",
-    option1: "1. One operator ",
-    option2: "2. String, object, integer, decimal, undefined, null",
-    option3: "3. String, numbers, boolean",
-    option4: "4. String, number, boolean, undefined, symbol, null",
+    question: "Where are variables declared in the global scope accessible?",
+    option1: "1. Anywhere ",
+    option2: "2. Only inside the function they were declared in",
+    option3: "3. nowhere",
+    option4: "4. Variables can't be declared",
     answer: 1,
   },
+  {
+    question: "What does TDZ stand for?",
+    option1: "1. TDZ stands for Temporal Dead Zone",
+    option2: "2. TDZ stands for Temperature Danger Zone",
+    option3: "3. TDZ stands for The Directory Zone",
+    option4: "4. TDZ stands for Total Danger Zone",
+    answer: 1,
+  },
+  {
+    question: "Where is Javascript code executed?",
+    option1: "1. In the browser",
+    option2: "2. The Call stack",
+    option3: "3. The Heap",
+    option4: "4. The Variable Environment",
+    answer: 2,
+  },
+  {
+    question:
+      "What 3 languages are usually used together for front end development",
+    option1: "1. HTML, CSS, Python",
+    option2: "2. HTML, JavaScript, C+",
+    option3: "3. HTML, CSS, Javascript",
+    option4: "4. Only Javascript",
+    answer: 3,
+  },
+  {
+    question:
+      "If var = 5; is declared within the block of an if/else statement, is it accessible outside of that statement?",
+    option1:
+      "1. No because variables are only accessible within the scope of what ever they are created in",
+    option2: "2. Yes because var is function scoped, not block scoped",
+    option3: "3. Yes because var is hoisted so it ignores all scopes",
+    option4: "4. Yes, but only in strict mode",
+    answer: 2,
+  },
+  {
+    question:
+      "When a language is said to have First Class Functions, it means___?",
+    option1: "1. they have functions of high quality ",
+    option2:
+      "2. they have functions that can be evoked immedietly and will only run once",
+    option3: "3. First Class Functions are a myth ",
+    option4:
+      "4. functions are treated as variables which means they can be passed into or returned from other functions",
+    answer: 4,
+  },
 ];
-
-//* Loose code
 
 // This will make availableQuestions into a full copy of the questions array
 availableQuestions = [...questions];
 
 //*FUNCTIONS
 
-//^ Timers
 // Function that will start counting from startTime down to 0 then stop
 function countDownFunction() {
   if (startTime >= 0 && sectionCounter === 1) {
@@ -106,7 +146,6 @@ function countDownFunction() {
   }
 }
 
-//^ Section Counter
 // When called it moves to next section and decides what happens in each section
 let sectionCounter = 0;
 const nextSection = function () {
@@ -129,12 +168,12 @@ const nextSection = function () {
     scoresList();
     formSection.classList.add("hide");
     highScoresSection.classList.remove("hide");
+    scoreLink.classList.add("hide");
   } else {
     sectionCounter = 0;
   }
 };
 
-//^ Get New Questions
 // To generate a new question and display it along with its choices
 function getNewQuestions() {
   // Creates a variable that stores the index position of random available questions
@@ -161,8 +200,6 @@ function getNewQuestions() {
   acceptingAnswers = true;
 }
 
-//^Validate Answer
-//FIXME: When I click on the button-wrapper it will move on to the next question and will be counted as a correct answer
 // Function that validates answer
 function validateAnswer(e) {
   // After someone answers they will need to wait before answering again
@@ -208,7 +245,6 @@ function validateAnswer(e) {
   }, 1000);
 }
 
-//^ Dispaying Score
 function finalScore() {
   if (startTime != null) {
     // Final score will be sent to local storage
@@ -217,23 +253,16 @@ function finalScore() {
   }
 }
 
-//^ Saving Score
-
 function saveScore(e) {
   e.preventDefault();
-  //FIXME: Disabled stays disabled
-  // submitButtonEl.disabled = !input.value;
   // Creates an object with the value of the user score and inputed name
   currentScore = localStorage.getItem("currentScore");
   const score = {
     score: currentScore,
     name: input.value,
   };
-
-  console.log(score.score);
   // Pushes that name and score into an array called highScores
   highScores.push(score);
-  console.log(highScores);
   // This will sort it in order of the score value
   highScores.sort(function (a, b) {
     return b.score - a.score;
@@ -247,22 +276,13 @@ function saveScore(e) {
 }
 // The place each player got
 let place = 1;
-//^ Loading and displaying data from local storage
 function scoresList() {
   // Adds li to ul for each score submitted
   listOfScores.innerHTML = highScores
     .map(function (score) {
-      return `<li class="score-item">${place++}.${score.name.toUpperCase()}-${score.score}</li>`;
+      return `<li class="score-item">${place++}. ${score.name.toUpperCase()}-${score.score}</li>`;
     })
     .join("");
-}
-
-//^Reset function
-function reset() {
-  sectionCounter = 0;
-  startTime = 60;
-  highScoresSection.classList.add("hide");
-  introSection.classList.remove("hide");
 }
 
 //*EVENT LISTENERS
@@ -276,11 +296,17 @@ quizParent.addEventListener("click", validateAnswer);
 // When submit button is pressed, score will be saved and will move onto high score will be submitted
 submitButtonEl.addEventListener("click", saveScore);
 
-// When the go back button is pressed, reset and go back to home page
-// restartButtonEl.addEventListener("click", reset);
-
 // When clear high scores button is pressed, all high scores are cleared
 clearScoresButtonEl.addEventListener("click", function () {
   localStorage.clear();
   nextSection();
+});
+
+// When view high scores link is clicked on, it will show the high scores page
+scoreLink.addEventListener("click", function () {
+  highScoresSection.classList.remove("hide");
+  introSection.classList.add("hide");
+  quizSection.classList.add("hide");
+  formSection.classList.add("hide");
+  scoresList();
 });

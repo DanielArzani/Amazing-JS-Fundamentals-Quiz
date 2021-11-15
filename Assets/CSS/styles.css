@@ -114,8 +114,9 @@ form,
 
 /* Styling for Wrong/Right text and its border */
 .choice-wrapper {
-  color: #e2e2e2;
-  font-weight: bold;
+  color: #a4a3a3;
+  font-size: 1.5rem;
+
   border-top: 1px solid;
   margin-top: 1em;
   width: 40em;
